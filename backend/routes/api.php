@@ -17,8 +17,20 @@ Route::get('/perfis', function () {
     );
 });
 
+Route::get(
+    '/relatorios/resumo-dsa/{id}',
+    [RelatorioController::class, 'consultarResumoDsa']
+);
+Route::get(
+    '/relatorios/resumo-dsa/{id}/download',
+    [RelatorioController::class, 'baixarResumoDsa']
+);
+
+
 Route::get('/agendas', [AgendaController::class, 'index']);
 Route::post('/agendas', [AgendaController::class, 'store']);
+Route::delete('/agendas/{id}', [AgendaController::class, 'destroy']);
 Route::post('/agendas/{id}/respostas', [RespostaController::class, 'store']);
 Route::get('/agendas/{id}/respostas', [RespostaController::class, 'index']);
 Route::post('/relatorios/solicitar-resumo-dsa', [RelatorioController::class, 'solicitarResumoDsa']);
+
