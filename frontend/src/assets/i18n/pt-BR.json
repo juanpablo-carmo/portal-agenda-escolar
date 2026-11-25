@@ -1,4 +1,9 @@
 {
+  "geral":{
+    "required": "Campo obrigatório",
+    "minlength": "O campo precisa ter no mínimo {{ requiredLength }} caracteres",
+    "pattern": "O campo não pode conter apenas espaços em branco"
+  },
   "layout": {
     "banners": "Banners",
     "criar-agenda": "Criar Agenda",

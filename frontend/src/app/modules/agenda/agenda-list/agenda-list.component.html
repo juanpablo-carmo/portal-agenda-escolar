@@ -12,7 +12,7 @@
   </section>
 
   <section
-    *ngIf="agendaSelecionadaId !== null"
+    *ngIf="!!agendaSelecionadaId"
     class="min-w-0 space-y-4 rounded-lg border bg-white p-4 sm:p-6 inset-shadow-sm inset-shadow-black/20"
   >
     <div>
@@ -43,29 +43,21 @@
           maxlength="255"
           [ngClass]="{
             'border-red-500 focus:ring-red-500':
-              formulario.controls.nomeAluno.touched &&
-              formulario.controls.nomeAluno.dirty &&
-              formulario.controls.nomeAluno.invalid,
-            'border-gray-300 focus:ring-green-600':
-              !formulario.controls.nomeAluno.invalid ||
-              !formulario.controls.nomeAluno.touched ||
-              !formulario.controls.nomeAluno.dirty,
+              formulario.controls.nomeAluno.touched && formulario.controls.nomeAluno.invalid,
+            'border-gray-300 focus:ring-green-600': formulario.controls.nomeAluno.valid,
           }"
-          placeholder="{{ 'enviarResposta.placeholder-nome-aluno' | translate }}"
+          [placeholder]="'enviarResposta.placeholder-nome-aluno' | translate"
           class="w-full min-h min-w-0 rounded-lg border p-3 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2"
         />
         <p
-          *ngIf="
-            formulario.controls.nomeAluno.touched &&
-            formulario.controls.nomeAluno.dirty &&
-            onObterErroNome(formulario.controls.nomeAluno) as erro
-          "
+          *ngIf="formulario.controls.nomeAluno.touched && formulario.controls.nomeAluno.invalid"
           animate.enter="transition-opacity duration-300 ease-in opacity-100"
           animate.leave="transition-opacity duration-300 ease-out opacity-0"
           class="mt-1 text-sm text-red-600"
           role="alert"
         >
-          {{ erro | translate }}
+          @let error = showMessageError('nomeAluno');
+          {{ error.key | translate: error.params }}
         </p>
       </div>
 
@@ -90,20 +82,21 @@
               !formulario.controls.comentarioResposta.touched ||
               !formulario.controls.comentarioResposta.dirty,
           }"
-          placeholder="{{ 'enviarResposta.placeholder-comentario' | translate }}"
+          [placeholder]="'enviarResposta.placeholder-comentario' | translate"
           class="w-full min-w-0 rounded-lg border p-3 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2"
         ></textarea>
         <p
           *ngIf="
             formulario.controls.comentarioResposta.touched &&
-            formulario.controls.comentarioResposta.dirty &&
-            onObterErroComentario(formulario.controls.comentarioResposta) as erro"
+            formulario.controls.comentarioResposta.invalid
+          "
           animate.enter="transition-opacity duration-300 ease-in opacity-100"
           animate.leave="transition-opacity duration-300 ease-out opacity-0"
           class="mt-1 text-sm text-red-600"
           role="alert"
         >
-          {{ erro | translate }}
+          @let error = showMessageError('comentarioResposta');
+          {{ error.key | translate: error.params }}
         </p>
       </div>
 
@@ -219,7 +212,7 @@
   </section>
 
   <section
-    *ngIf="agendaSelecionadaId === null"
+    *ngIf="!agendaSelecionadaId"
     class="hidden min-w-0 rounded-lg border border-dashed bg-white p-8 text-center lg:block"
   >
     <div class="flex flex-col items-center gap-3">

@@ -1,12 +1,18 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { COMMONS_MODULES } from '../../../shared';
 import { ListAgendaComponent } from '../components/agenda-list/list-agenda.component';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Agenda as AgendaLista } from '../components/agenda-list/list-agenda.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
-
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  FormBuilder,
+} from '@angular/forms';
+import { take } from 'rxjs/operators';
 
 interface Agenda {
   id: number;
@@ -31,7 +37,6 @@ interface Resposta {
   templateUrl: './agenda-list.component.html',
 })
 export class AgendaListComponent implements OnInit {
-
   protected agendas: Agenda[] = [];
   protected carregando = true;
 
@@ -51,18 +56,7 @@ export class AgendaListComponent implements OnInit {
   protected agendaSelecionadaId: number | null = null;
   protected respostas: Resposta[] = [];
 
-  protected formulario = new FormGroup({
-    nomeAluno: new FormControl('', {
-
-      nonNullable: true,
-      validators: [Validators.required, Validators.pattern(/.*\S.*/), Validators.minLength(3)],
-    }),
-    comentarioResposta: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.pattern(/.*\S.*/)]
-    }),
-    arquivoSelecionado: new FormControl<File | null>(null)
-  });
+  protected formulario: FormGroup;
 
   protected get nomeAluno(): string {
     return this.formulario.controls.nomeAluno.value;
@@ -88,7 +82,6 @@ export class AgendaListComponent implements OnInit {
     this.formulario.controls.arquivoSelecionado.setValue(valor);
   }
 
-
   protected carregandoRespostas = false;
   protected enviandoResposta = false;
   protected mensagemResposta = '';
@@ -99,77 +92,78 @@ export class AgendaListComponent implements OnInit {
 
   protected formatoData = 'dd/MM/yyyy HH:mm';
 
-  private readonly http: HttpClient;
-  private readonly translate: TranslateService;
-
-  constructor(http: HttpClient, translate: TranslateService) {
-    this.http = http;
-    this.translate = translate;
-
+  constructor(
+    private _http: HttpClient,
+    private _formBuilder: FormBuilder,
+    private _translate: TranslateService,
+  ) {
     this.onAtualizarFormatoData();
 
-    this.translate.onLangChange.subscribe(() => {
+    this._translate.onLangChange.subscribe(() => {
       this.onAtualizarFormatoData();
     });
   }
 
   public onAtualizarFormatoData(): void {
-    const idioma = this.translate.currentLang();
+    const idioma = this._translate.currentLang();
 
-    this.formatoData =
-      idioma === 'en'
-        ? 'MM/dd/yyyy hh:mm a'
-        : 'dd/MM/yyyy HH:mm';
+    this.formatoData = idioma === 'en' ? 'MM/dd/yyyy hh:mm a' : 'dd/MM/yyyy HH:mm';
+  }
+
+  public ngOnInit() {
+    this.initForm();
+    this._http.get<Agenda[]>('http://localhost:8000/api/agendas').subscribe({
+      next: (dados) => {
+        this.agendas = dados;
+        this.carregando = false;
+      },
+      error: (erro) => {
+        console.error('Erro ao buscar agendas:', erro);
+        this.erro = 'Não foi possível carregar as agendas.';
+        this.carregando = false;
+      },
+    });
+
+    this._http
+      .get<{ id: number; nome: string; tipo: string }[]>('http://localhost:8000/api/perfis')
+      .subscribe({
+        next: (dados) => {
+          this.perfis = dados;
+
+          if (dados.length > 0) {
+            this.novoPerfilId = dados[0].id;
+          }
+        },
+        error: (erro) => {
+          console.error('Erro ao buscar perfis:', erro);
+        },
+      });
+  }
+
+  protected showMessageError(ctrlName: string): any {
+    const ctrl = this.formulario.get(ctrlName);
+    const [key, params] = Object.entries(ctrl?.errors as any)[0];
+    return { key: `geral.${key}`, params };
   }
 
   public onObterErroNome(campo: AbstractControl): string | null {
-  if (campo.hasError('required')) {
-    return 'enviarResposta.nome-obrigatorio';
-  }
+    if (campo.hasError('required')) {
+      return 'enviarResposta.nome-obrigatorio';
+    }
 
-  if (campo.hasError('minlength')) {
-    return 'enviarResposta.nome-minimo';
-  }
+    if (campo.hasError('minlength')) {
+      return 'enviarResposta.nome-minimo';
+    }
 
-  return null;
-}
+    return null;
+  }
 
   public onObterErroComentario(campo: AbstractControl): string | null {
-  if (campo.hasError('required')) {
-    return 'enviarResposta.comentario-obrigatorio';
-  }
+    if (campo.hasError('required')) {
+      return 'enviarResposta.comentario-obrigatorio';
+    }
 
-  return null;
-}
-
-  public ngOnInit(): void {
-    this.http.get<Agenda[]>('http://localhost:8000/api/agendas')
-      .subscribe({
-        next: (dados) => {
-          this.agendas = dados;
-          this.carregando = false;
-        },
-        error: (erro) => {
-          console.error('Erro ao buscar agendas:', erro);
-          this.erro = 'Não foi possível carregar as agendas.';
-          this.carregando = false;
-        }
-      });
-
-    this.http.get<{ id: number; nome: string; tipo: string }[]>(
-      'http://localhost:8000/api/perfis'
-    ).subscribe({
-      next: (dados) => {
-        this.perfis = dados;
-
-        if (dados.length > 0) {
-          this.novoPerfilId = dados[0].id;
-        }
-      },
-      error: (erro) => {
-        console.error('Erro ao buscar perfis:', erro);
-      }
-    });
+    return null;
   }
 
   public onCadastrarAgenda(dados?: {
@@ -197,13 +191,10 @@ export class AgendaListComponent implements OnInit {
       titulo,
       descricao,
       data_evento: dataEvento,
-      status: 'ativo'
+      status: 'ativo',
     };
 
-    this.http.post<Agenda>(
-      'http://localhost:8000/api/agendas',
-      novaAgenda
-    ).subscribe({
+    this._http.post<Agenda>('http://localhost:8000/api/agendas', novaAgenda).subscribe({
       next: (agendaCriada) => {
         this.agendas.push(agendaCriada);
         this.novoTitulo = '';
@@ -216,7 +207,7 @@ export class AgendaListComponent implements OnInit {
         console.error('Erro ao cadastrar agenda:', erro);
         this.mensagem = 'Não foi possível cadastrar a agenda.';
         this.salvando = false;
-      }
+      },
     });
   }
 
@@ -231,7 +222,7 @@ export class AgendaListComponent implements OnInit {
   }
 
   public onExcluirAgenda(agenda: AgendaLista): void {
-    const confirmacao = this.translate.instant('listaDeAgendas.confirmarExclusao', {
+    const confirmacao = this._translate.instant('listaDeAgendas.confirmarExclusao', {
       titulo: agenda.titulo,
     });
 
@@ -241,7 +232,7 @@ export class AgendaListComponent implements OnInit {
 
     this.excluindoAgendaId = agenda.id;
 
-    this.http.delete<void>(`http://localhost:8000/api/agendas/${agenda.id}`).subscribe({
+    this._http.delete<void>(`http://localhost:8000/api/agendas/${agenda.id}`).subscribe({
       next: () => {
         this.agendas = this.agendas.filter((item) => item.id !== agenda.id);
 
@@ -254,7 +245,7 @@ export class AgendaListComponent implements OnInit {
       },
       error: (erro) => {
         console.error('Erro ao excluir agenda:', erro);
-        window.alert(this.translate.instant('listaDeAgendas.erroExclusao'));
+        window.alert(this._translate.instant('listaDeAgendas.erroExclusao'));
         this.excluindoAgendaId = null;
       },
     });
@@ -263,19 +254,19 @@ export class AgendaListComponent implements OnInit {
   private carregarRespostas(agendaId: number): void {
     this.carregandoRespostas = true;
 
-    this.http.get<Resposta[]>(
-      `http://localhost:8000/api/agendas/${agendaId}/respostas`
-    ).subscribe({
-      next: (dados) => {
-        this.respostas = dados;
-        this.carregandoRespostas = false;
-      },
-      error: (erro) => {
-        console.error('Erro ao carregar respostas:', erro);
-        this.mensagemResposta = 'Não foi possível carregar as respostas.';
-        this.carregandoRespostas = false;
-      }
-    });
+    this._http
+      .get<Resposta[]>(`http://localhost:8000/api/agendas/${agendaId}/respostas`)
+      .subscribe({
+        next: (dados) => {
+          this.respostas = dados;
+          this.carregandoRespostas = false;
+        },
+        error: (erro) => {
+          console.error('Erro ao carregar respostas:', erro);
+          this.mensagemResposta = 'Não foi possível carregar as respostas.';
+          this.carregandoRespostas = false;
+        },
+      });
   }
 
   public onArquivoSelecionado(event: Event): void {
@@ -283,65 +274,62 @@ export class AgendaListComponent implements OnInit {
     this.arquivoSelecionado = campo.files?.[0] ?? null;
   }
 
-
-public onEnviarResposta(): void {
-  this.mensagemResposta = '';
-
-  this.formulario.markAllAsDirty();
-  this.formulario.markAllAsTouched();
-
-  alert(this.translate.instant('criarAgenda.campos-invalidos'));
-
-  if (this.agendaSelecionadaId === null) {
-    this.mensagemResposta = 'Selecione uma agenda.';
-    return;
-  }
-
-  if (this.formulario.invalid) {
-    return;
-  }
-
-  const dados = new FormData();
-  dados.append('aluno_nome', this.nomeAluno.trim());
-  dados.append('comentario', this.comentarioResposta.trim());
-
-  if (this.arquivoSelecionado) {
-    dados.append('arquivo', this.arquivoSelecionado);
-  }
-
-  this.enviandoResposta = true;
-
-  this.http.post<Resposta>(
-    `http://localhost:8000/api/agendas/${this.agendaSelecionadaId}/respostas`,
-    dados
-  ).subscribe({
-    next: () => {
-      const agendaId = this.agendaSelecionadaId!;
-
-      this.formulario.reset({
-        nomeAluno: '',
-        comentarioResposta: '',
-        arquivoSelecionado: null
-      });
-
-      this.mensagemResposta = 'Resposta enviada com sucesso!';
-      this.carregarRespostas(agendaId);
-      this.enviandoResposta = false;
-    },
-    error: (erro) => {
-      console.error('Erro ao enviar resposta:', erro);
-
-      if (erro.status === 422) {
-        this.mensagemResposta =
-          'Confira os campos preenchidos e o tamanho do arquivo (máximo 10 MB).';
-      } else {
-        this.mensagemResposta =
-          'Não foi possível enviar a resposta. Tente novamente.';
+  public onEnviarResposta(): void {
+    if (this.formulario.valid) {
+      if (!this.enviandoResposta) {
+        this.enviandoResposta = true;
+        this.save();
       }
-
-      this.enviandoResposta = false;
+    } else {
+      this.formulario.markAllAsTouched();
+      alert(this._translate.instant('criarAgenda.campos-invalidos'));
     }
-  });
-}
+  }
 
+  private save() {
+    const dados = new FormData();
+    dados.append('aluno_nome', this.nomeAluno.trim());
+    dados.append('comentario', this.comentarioResposta.trim());
+
+    if (this.arquivoSelecionado) {
+      dados.append('arquivo', this.arquivoSelecionado);
+    }
+
+    this._http
+      .post<Resposta>(
+        `http://localhost:8000/api/agendas/${this.agendaSelecionadaId}/respostas`,
+        dados,
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          const agendaId = this.agendaSelecionadaId!;
+          this.formulario.reset();
+          this.mensagemResposta = 'Resposta enviada com sucesso!';
+          this.carregarRespostas(agendaId);
+        },
+        error: (erro) => {
+          console.error('Erro ao enviar resposta:', erro);
+
+          if (erro.status === 422) {
+            this.mensagemResposta =
+              'Confira os campos preenchidos e o tamanho do arquivo (máximo 10 MB).';
+          } else {
+            this.mensagemResposta = 'Não foi possível enviar a resposta. Tente novamente.';
+          }
+        },
+        complete: () => (this.enviandoResposta = false),
+      });
+  }
+
+  private initForm() {
+    this.formulario = this._formBuilder.group({
+      nomeAluno: [
+        undefined,
+        [Validators.required, Validators.pattern(/.*\S.*/), Validators.minLength(3)],
+      ],
+      comentarioResposta: [undefined, [Validators.pattern(/.*\S.*/)]],
+      arquivoSelecionado: null,
+    });
+  }
 }

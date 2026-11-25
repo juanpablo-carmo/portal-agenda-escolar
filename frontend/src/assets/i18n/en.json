@@ -1,4 +1,9 @@
 {
+  "geral":{
+    "required": "Required field",
+    "minlength": "The field must be at least {{ requiredLength }} characters",
+    "pattern": "The field cannot contain only blank spaces"
+  },
   "layout": {
     "banners": "Banners",
     "criar-agenda": "Create Schedule",
