@@ -13,6 +13,13 @@
     "suporte": "Suporte"
   },
 
+  "supportModal": {
+    "title": "Suporte",
+    "description": "Precisa de ajuda com o Portal Agenda? Entre em contato com a equipe responsável pelo atendimento da sua escola.",
+    "close": "Fechar janela de suporte",
+    "ok": "Entendi"
+  },
+
   "agendaReports": {
     "titulo": "Relatório DSA",
     "descricao": "Gere um resumo das agendas e de suas respostas.",
@@ -58,7 +65,7 @@
     "titulo-pagina": "Enviar Resposta",
     "subtitulo": "Preencha os dados abaixo para responder à agenda selecionada.",
     "nome-aluno": "Nome do Aluno *",
-    "comentario": "Comentário",
+    "comentario": "Resposta",
     "resposta": "Resposta",
     "placeholder-nome-aluno": "Ex.: João da Silva",
     "placeholder-comentario": "Escreva sua resposta...",

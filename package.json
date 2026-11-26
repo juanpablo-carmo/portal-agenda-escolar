@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@angular/cdk": "^22.3.0",
+    "@primeuix/themes": "^3.1.1",
+    "primeng": "^22.1.5"
+  }
+}

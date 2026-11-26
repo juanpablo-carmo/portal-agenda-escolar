@@ -1,9 +1,8 @@
-<div class="grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-2 px-2 py-2 sm:px-3 lg:px-3">
-  <section
-    class="min-w-0 rounded-lg border bg-white p-4 sm:p-6 inset-shadow-sm inset-shadow-black/20"
-  >
+<div class="grid min-w-0 grid-cols-1 items-start gap-10 px-2 py-2 sm:px-3 lg:px-3">
+  <section class="min-w-0 rounded-lg bg-white p-4 sm:p-6 inset-shadow-sm inset-shadow-black/20">
     <app-list-agenda
       [agendas]="agendas"
+      [agendaSelecionadaId]="agendaSelecionadaId"
       [carregando]="carregando"
       [erro]="erro"
       (selecionar)="onSelecionarAgenda($event)"

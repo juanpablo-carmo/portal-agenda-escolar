@@ -12,6 +12,12 @@
     "servicos": "Services",
     "suporte": "Support"
   },
+  "supportModal": {
+    "title": "Support",
+    "description": "Need help with Portal Agenda? Contact the support team at your school.",
+    "close": "Close support dialog",
+    "ok": "Got it"
+  },
   "agendaReports": {
     "titulo": "DSA Report",
     "descricao": "Generate a summary of schedules and their responses.",
@@ -52,11 +58,11 @@
   },
   "enviarResposta": {
     "aluno": "Student",
-    "titulo-pagina": "Send Response",
+    "titulo-pagina": "Send answer",
     "subtitulo": "Fill in the details below to respond to the selected schedule.",
     "nome-aluno": "Student Name *",
-    "comentario": "Comment",
-    "resposta": "Response",
+    "comentario": "Answer",
+    "resposta": "Answer",
     "placeholder-nome-aluno": "Ex.: John Marston",
     "placeholder-comentario": "Write your response...",
     "enviar-resposta": "Send Response",
