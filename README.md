@@ -36,6 +36,19 @@ Copy-Item .\backend\.env.example .\backend\.env
 
 O arquivo `backend/.env.example` contém a configuração de referência para o ambiente local. Confira se as variáveis estão compatíveis com o `docker-compose.yml`.
 
+Para habilitar o login Google, crie um OAuth Client ID do tipo **Web application** no Google Cloud Console, adicione `http://localhost:4200` às origens JavaScript autorizadas e configure estas variáveis em `backend/.env`:
+
+```dotenv
+GOOGLE_CLIENT_ID=seu-client-id.apps.googleusercontent.com
+AUTH_ADMIN_EMAIL=seu.email.google@dominio.com
+```
+
+O `AUTH_ADMIN_EMAIL` identifica a conta inicial de administrador. Essa conta recebe o perfil administrador ao entrar com o Google; todas as outras contas começam pendentes até que um administrador aprove o acesso na tela **Permissões**. O login usa o Client ID no botão Google do Angular e na validação do token no Laravel. Não é necessário expor nem configurar o Client Secret neste fluxo. Se você alterar essas variáveis com os containers já iniciados, recrie o backend para aplicar a configuração:
+
+```powershell
+docker compose up -d --build --force-recreate --renew-anon-volumes backend
+```
+
 ### 3. Iniciar os containers
 
 ```powershell
@@ -53,6 +66,8 @@ docker compose exec backend php artisan key:generate
 ```powershell
 docker compose exec backend php artisan migrate --seed --force
 ```
+
+As migrations adicionam o identificador Google e o perfil inicial dos usuários. Leitores veem agendas e lançam respostas, editores também criam agendas e consultam respostas, e administradores gerenciam permissões e relatórios. O backend aplica as regras nas rotas da API.
 
 ### 6. Verificar os serviços
 

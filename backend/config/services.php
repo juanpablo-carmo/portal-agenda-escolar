@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+    ],
+
+    'auth' => [
+        'admin_email' => env('AUTH_ADMIN_EMAIL'),
+    ],
+
 ];

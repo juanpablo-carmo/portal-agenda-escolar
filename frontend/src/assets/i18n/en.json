@@ -1,11 +1,23 @@
 {
+  "geral": {
+    "required": "This field is required",
+    "minlength": "This field must have at least {{ requiredLength }} characters",
+    "pattern": "This field cannot contain only whitespace"
+  },
   "layout": {
     "banners": "Banners",
     "criar-agenda": "Create Schedule",
     "lista-de-agendas": "List of Schedules",
     "relatorio": "Report",
     "servicos": "Services",
-    "suporte": "Support"
+    "suporte": "Support",
+    "permissoes": "Permissions"
+  },
+  "supportModal": {
+    "title": "Support",
+    "description": "Need help with Portal Agenda? Contact your school's support team.",
+    "close": "Close support dialog",
+    "ok": "Got it"
   },
   "agendaReports": {
     "titulo": "DSA Report",
@@ -33,9 +45,10 @@
     "titulo-obrigatorio": "The title is required",
     "titulo-minimo": "The title must have at least 3 characters",
     "data-obrigatoria": "Date and time are required",
+    "descricao-obrigatoria": "The description is required",
     "agenda-failed": "Unable to register the schedule",
-    "agenda-sucess": "Schedule sucessfully saved",
-    "campos-invalidos":"There are mandatory fields that have not been filled out. Please check and try again."
+    "agenda-sucess": "Schedule saved successfully",
+    "campos-invalidos": "Some required fields are missing. Check the form and try again."
   },
   "listaDeAgendas": {
     "titulo-pagina": "Select a schedule",
@@ -49,24 +62,56 @@
     "aluno": "Student",
     "titulo-pagina": "Send Response",
     "subtitulo": "Fill in the details below to respond to the selected schedule.",
-    "nome-aluno": "Student Name *",
+    "nome-aluno": "Student name",
     "comentario": "Comment",
     "resposta": "Response",
-    "placeholder-nome-aluno": "Ex.: John Marston",
+    "placeholder-nome-aluno": "E.g.: John Smith",
     "placeholder-comentario": "Write your response...",
-    "enviar-resposta": "Send Response",
+    "enviar-resposta": "Send response",
     "processando": "Processing...",
-    "anexar-arquivo": "Attach File (optional, up to 10MB)",
+    "anexar-arquivo": "Attach file (optional, up to 10 MB)",
     "cancelar": "Cancel",
-    "arquivo-selecionado": "Selected File",
-    "nenhum-arquivo": "No File Attached",
-    "respostas-enviadas": "Responses Already Sent",
-    "carregando-respostas": "Loading Responses...",
-    "nenhuma-resposta": "No response registered for this schedule.",
+    "arquivo-selecionado": "Selected file",
+    "nenhum-arquivo": "No file attached.",
+    "respostas-enviadas": "Responses already sent",
+    "carregando-respostas": "Loading responses...",
+    "nenhuma-resposta": "No responses have been submitted for this schedule.",
     "resposta-enviada-em": "Response sent on {{ data }}",
     "nome-obrigatorio": "The student's name is required.",
     "comentario-obrigatorio": "The comment is required.",
-    "nome-minimo": "The name must be at least 3 characters long.",
+    "nome-minimo": "The name must have at least 3 characters.",
     "comentario-minimo": "The comment must have at least 3 characters."
-  }
+  },
+  "AGENDA_LIST": {
+    "REPLY_FORM": {
+      "CHOOSE_FILE": "Choose a file"
+    }
+  },
+  "permissoes": {
+    "titulo":"User permissions",
+    "descricao":"Approve new accounts and choose each person's access level.",
+    "contas-cadastradas":"Registered accounts",
+    "aguardando":"Awaiting approval",
+    "administradores":"Administrators",
+    "conta-criada":"Account created in",
+    "permissao":"Permission",
+    "atualizar": "Update list",
+    "carregando": "Loading users…",
+    "nenhuma-conta": "No accounts have been registered.",
+    "salvando": "Saving…",
+    "erro-carregar": "Unable to load users.",
+    "erro-alterar": "Unable to update this permission.",
+    "salvo": "Permission for {{ name }} saved.",
+    "manter-proprio-administrador": "You cannot remove your own administrator access.",
+    "manter-um-administrador": "At least one administrator must remain.",
+    "descricao-leitor": "Can view schedules and reply, but cannot see other people's responses.",
+    "descricao-editor": "Can create schedules, view all responses, and submit responses.",
+    "descricao-administrador": "Can manage permissions, schedules, responses, and reports.",
+    "roles": {
+      "pendente": "Pending",
+      "leitor": "Reader",
+      "editor": "Editor",
+      "administrador": "Administrator"
+    }
+}
 }

@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 
 import {
-  FormControl,
   FormGroup,
+  FormBuilder,
   ReactiveFormsModule,
   Validators,
   AbstractControl,
@@ -43,32 +43,23 @@ export class FormAgendaComponent implements OnInit, OnChanges {
     perfilId: number;
   }>();
 
-  protected formulario = new FormGroup({
-    titulo: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(3)],
-    }),
-
-    descricao: new FormControl('', {
-      nonNullable: true,
-    }),
-
-    dataEvento: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-
-    perfilId: new FormControl(0, {
-      nonNullable: true,
-      validators: [Validators.min(1)],
-    }),
-  });
+  public formulario: FormGroup;
 
   protected idiomaAtual = 'pt-BR';
 
   private _idiomasSuportados = ['pt-BR', 'en'];
 
-  constructor(private _translate: TranslateService) {}
+constructor(
+  private _translate: TranslateService,
+  private _form: FormBuilder,
+) {
+  this.formulario = this._form.group({
+    titulo: ['', [Validators.required, Validators.minLength(3)]],
+    descricao: ['', [Validators.required]],
+    dataEvento: ['', [Validators.required]],
+    perfilId: [0, [Validators.min(1)]],
+  });
+}
 
   public ngOnInit(): void {
     this._definirIdiomaInicial();
@@ -76,12 +67,12 @@ export class FormAgendaComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['perfis'] && this.perfis.length > 0) {
-      const perfilAtual = this.formulario.controls.perfilId.value;
+      const perfilAtual = this.formulario.controls['perfilId'].value;
 
       const perfilExiste = this.perfis.some((perfil) => perfil.id === perfilAtual);
 
       if (!perfilExiste) {
-        this.formulario.controls.perfilId.setValue(this.perfis[0].id);
+        this.formulario.controls['perfilId'].setValue(this.perfis[0].id);
       }
     }
 

@@ -1,13 +1,24 @@
 {
+  "geral": {
+    "required": "Campo obrigatório",
+    "minlength": "O campo precisa ter no mínimo {{ requiredLength }} caracteres",
+    "pattern": "O campo não pode conter apenas espaços em branco"
+  },
   "layout": {
     "banners": "Banners",
     "criar-agenda": "Criar Agenda",
     "lista-de-agendas": "Lista de Agendas",
     "relatorio": "Relatório",
     "servicos": "Serviços",
-    "suporte": "Suporte"
+    "suporte": "Suporte",
+    "permissoes": "Permissões"
   },
-
+  "supportModal": {
+    "title": "Suporte",
+    "description": "Precisa de ajuda com o Portal Agenda? Entre em contato com a equipe responsável pelo atendimento da sua escola.",
+    "close": "Fechar janela de suporte",
+    "ok": "Entendi"
+  },
   "agendaReports": {
     "titulo": "Relatório DSA",
     "descricao": "Gere um resumo das agendas e de suas respostas.",
@@ -20,7 +31,6 @@
     "baixado": "Relatório baixado com sucesso.",
     "erroDownload": "Não foi possível baixar o relatório."
   },
-
   "criarAgenda": {
     "titulo-pagina": "Nova Agenda",
     "subtitulo": "Preencha os dados para cadastrar um evento escolar.",
@@ -34,13 +44,13 @@
     "processando": "Processando...",
     "titulo-obrigatorio": "O título é obrigatório",
     "titulo-minimo": "O título precisar ter no mínimo 3 caracteres",
-    "data-obrigatoria":"A data e hora são obrigatórias",
-    "agenda-failed":"Não foi possível cadastrar a agenda",
-    "agenda-sucess":"Agenda salva com sucesso",
-    "campos-invalidos":"Existem campos obrigatórios que não foram preenchidos. Verifique e tente novamente."
+    "data-obrigatoria": "A data e hora são obrigatórias",
+    "descricao-obrigatoria": "A descrição é obrigatória",
+    "agenda-failed": "Não foi possível cadastrar a agenda",
+    "agenda-sucess": "Agenda salva com sucesso",
+    "campos-invalidos": "Existem campos obrigatórios que não foram preenchidos. Verifique e tente novamente."
   },
-
-    "listaDeAgendas": {
+  "listaDeAgendas": {
     "titulo-pagina": "Selecione uma agenda",
     "subtitulo-pagina": "Escolha uma agenda da lista para visualizar e enviar respostas.",
     "ativo": "Ativa",
@@ -53,7 +63,7 @@
     "titulo-pagina": "Enviar Resposta",
     "subtitulo": "Preencha os dados abaixo para responder à agenda selecionada.",
     "nome-aluno": "Nome do Aluno *",
-    "comentario": "Comentário",
+    "comentario": "Resposta",
     "resposta": "Resposta",
     "placeholder-nome-aluno": "Ex.: João da Silva",
     "placeholder-comentario": "Escreva sua resposta...",
@@ -69,8 +79,40 @@
     "resposta-enviada-em": "Resposta enviada em: {{ data }}",
     "nome-obrigatorio": "O nome do aluno é obrigatório.",
     "comentario-obrigatorio": "O comentário é obrigatório.",
-    "nome-minimo":"O nome deve ter pelo menos 3 caracteres.",
-    "comentario-minimo":"O comentario deve ter pelo menos 3 caracteres."
+    "nome-minimo": "O nome deve ter pelo menos 3 caracteres.",
+    "comentario-minimo": "O comentario deve ter pelo menos 3 caracteres."
+  },
+  "permissoes": {
+    "titulo":"Permissões de usuários",
+    "descricao":"Aprove contas novas e escolha o nível de acesso de cada pessoa.",
+    "contas-cadastradas":"Contas cadastradas",
+    "aguardando":"Aguardando aprovação",
+    "administradores":"Administradores",
+    "conta-criada":"Conta criada em",
+    "permissao":"Permissão",
+    "atualizar": "Atualizar lista",
+    "carregando": "Carregando usuários…",
+    "nenhuma-conta": "Nenhuma conta cadastrada.",
+    "salvando": "Salvando…",
+    "erro-carregar": "Não foi possível carregar os usuários.",
+    "erro-alterar": "Não foi possível alterar esta permissão.",
+    "salvo": "Permissão de {{ name }} salva.",
+    "manter-proprio-administrador": "Você não pode remover sua própria permissão de administrador.",
+    "manter-um-administrador": "O sistema precisa manter pelo menos um administrador.",
+    "descricao-leitor": "Pode ver agendas e responder, mas não pode ver respostas de outras pessoas.",
+    "descricao-editor": "Pode criar agendas, consultar todas as respostas e responder.",
+    "descricao-administrador": "Pode gerenciar permissões, agendas, respostas e relatórios.",
+    "roles": {
+      "pendente": "Pendente",
+      "leitor": "Leitor",
+      "editor": "Editor",
+      "administrador": "Administrador"
+    }
+  },
 
+  "AGENDA_LIST": {
+    "REPLY_FORM": {
+      "CHOOSE_FILE": "Escolher arquivo"
+    }
   }
 }
